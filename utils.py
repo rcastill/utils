@@ -19,7 +19,7 @@ def init(args):
         f.write('[]')
 
 
-def create(args):
+def register(args):
     if not path.isfile(UTILS_FILE):
         if args.init:
             init(argparse.Namespace(path='.'))
@@ -30,6 +30,7 @@ def create(args):
 
     # there cannot be repeated language instances per project
     utils = None
+    lang_entry = {'lang': args.lang.lower(), 'path': None, 'deps': []}
     with open(UTILS_FILE) as utilsf:
         try:
             utils = json.load(utilsf)
@@ -37,22 +38,28 @@ def create(args):
             print('Corrupted UTILS_FILE', file=stderr)
             return
         for entry in utils:
-            if utils['lang'] == args.lang:
-                print('Language {} already initialized in current project'
-                      .format(args.lang), file=stderr)
-                return
+            if entry['lang'] == args.lang:
+                if args.update:
+                    lang_entry = entry
+                    break
+                else:
+                    print('Language {} already initialized in current project'
+                          .format(args.lang), file=stderr)
+                    return
+        # if update
+        if lang_entry['path'] is not None:
+            utils.remove(lang_entry)
 
     # get language support
     lang = get_lang(args.lang)
 
     # create source files
     try:
-        util_source_path = lang.create_source(args.path)
+        lang_entry['path'] = lang.register_source(args.path, args.create)
         # update application state
-        utils.append({'lang': args.lang.lower(),
-                      'path': util_source_path, 'deps': []})
+        utils.append(lang_entry)
     except ValueError as e:
-        print('Could not create file(s) under {}: {}'.format(args.path, e))
+        print('Could not register file(s) under {}: {}'.format(args.path, e))
         return
 
     # backup file
@@ -96,17 +103,23 @@ def main():
     parser_init.set_defaults(func=init)
 
     # create subcommand
-    parser_create = subparsers.add_parser(
-        'create', help='Create new utils.{lang_ext} file')
-    parser_create.add_argument(
+    parser_register = subparsers.add_parser(
+        'register', help='Registers utils.{lang_ext} file')
+    parser_register.add_argument(
         '-p', '--path', help='Full path to utils.{lang_ext}', default='.')
-    parser_create.add_argument(
-        '-i', '--init', help='Initialize project and create.\
+    parser_register.add_argument(
+        '-i', '--init', help='Initialize project and register.\
         If project is already initialized, this option is ignored.',
         action='store_true')
-    parser_create.add_argument(
+    parser_register.add_argument(
+        '-c', '--create', help='Create file and register.\
+        If utils.{lang_ext} already exists, this options is ignored.',
+        action='store_true')
+    parser_register.add_argument(
+        '-u', '--update', help='Update file path', action='store_true')
+    parser_register.add_argument(
         'lang', help='Language code', choices=SUPPORTED_LANGUAGES)
-    parser_create.set_defaults(func=create)
+    parser_register.set_defaults(func=register)
 
     # add subcommand
     parser_add = subparsers.add_parser('add', help='Add package')

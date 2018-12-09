@@ -1,6 +1,7 @@
-def create_source(path):
+def register_source(path, create):
     '''
-    Create utils source file in path
+    Register utils source file in path. If file does
+    not exist, create? it.
     Note:
         - It should support path as parent directory
 

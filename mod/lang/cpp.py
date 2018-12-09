@@ -19,9 +19,10 @@ HEAD_TEMPLATE = '''\
 '''
 
 
-def create_source(path):
+def register_source(path, create):
     '''
-    Create utils source file in path
+    Register utils source file in path. If file does
+    not exist, create? it.
     Note:
         - It should support path as parent directory
 
@@ -52,19 +53,29 @@ def create_source(path):
     else:
         raise SyntaxError()
 
-    # if file exists
-    if ospath.isfile(impl_path):
-        raise ValueError(
-            'Implementation file {}, already exists'.format(impl_path))
-    if ospath.isfile(head_path):
-        raise ValueError(
-            'Header file {}, already exists'.format(head_path))
+    # check parent path existence
+    impl_parent = ospath.dirname(impl_path)
+    if not ospath.isdir(impl_parent):
+        raise ValueError('Unable to find "{}"'.format(impl_parent))
+    head_parent = ospath.dirname(head_path)
+    if not ospath.isdir(head_parent):
+        raise ValueError('Unable to find "{}"'.format(head_parent))
 
-    # create files
-    with open(impl_path, 'w') as implf:
-        implf.write(IMPL_TEMPLATE.format(header=head_path))
-    with open(head_path, 'w') as headf:
-        headf.write(HEAD_TEMPLATE)
+    # create or wimp
+    if not ospath.isfile(impl_path):
+        if create:
+            with open(impl_path, 'w') as implf:
+                implf.write(IMPL_TEMPLATE.format(header=head_path))
+        else:
+            raise ValueError(
+                'Implementation file {}, does not exist'.format(impl_path))
+    if not ospath.isfile(head_path):
+        if create:
+            with open(head_path, 'w') as headf:
+                headf.write(HEAD_TEMPLATE)
+        else:
+            raise ValueError(
+                'Header file {}, does not exist'.format(head_path))
 
     # path field
     return '{}:{}'.format(impl_path, head_path)
