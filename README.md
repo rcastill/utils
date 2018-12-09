@@ -17,7 +17,7 @@ That is where `upm` comes into play. The idea is to have a **minimal** package m
 - `upm` must be **unobtrusive**, this means, it must be compatible with the structure of any project, and must not ask for special formatting to its users
 - Code pieces (or packages) must be minimal and atomic, this means, it must not be necessary to keep track of package versions, since each package is defined as a set of immutable tasks
 
-**Important:** Each task (function) *behaviour* and *signature* should be immutable once commited, but new tasks could be added since it would not break the package's functionality
+**Important:** Each task's (function's) *behaviour* and *signature* should be immutable once commited, but new tasks could be added since it would not break the package's functionality
 
 ### Developing language support
 
