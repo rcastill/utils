@@ -17,7 +17,51 @@ That is where `upm` comes into play. The idea is to have a **minimal** package m
 - `upm` must be **unobtrusive**, this means, it must be compatible with the structure of any project, and must not ask for special formatting to its users
 - Code pieces (or packages) must be minimal and atomic, this means, it must not be necessary to keep track of package versions, since each package is defined as a set of immutable tasks
 
-**Important:** Each task's (function's) *behaviour* and *signature* should be immutable once commited, but new tasks could be added since it would not break the package's functionality
+>**Important:** Each task's (function's) *behaviour* and *signature* should be immutable once commited, but new tasks could be added since it would not break the package's functionality
+
+**Example**
+
+First commit of "git.com/user/math"
+
+```C++
+int mul(int a, int b)
+{
+    if (a < 0) {
+        a = -a;
+        b = -b;
+    }
+    int m = 0;
+    for (; a > 0; a--) {
+        m += b;
+    }
+    return m;
+}
+```
+
+Second commit of "git.com/user/math"
+
+```C++
+int mul(int a, int b)
+{
+    return a * b;
+}
+```
+
+Third commit of "git.com/user/math"
+
+```C++
+int mul(int a, int b)
+{
+    return a * b;
+}
+
+int add(int a, int b)
+{
+    return a + b;
+}
+```
+
+In the example above, a package hosted in the repo "git.com/user/math", introduces the task `int mul(int, int)` on its first commit, modifies its content *but not its behaviour* on its second commit and finally adds a new task `int add(int, int)` without modifying pre-existent tasks on its third commit. That is an example of the expected composition of a package.
 
 ### How to use
 
