@@ -18,3 +18,7 @@ That is where `upm` comes into play. The idea is to have a **minimal** package m
 - Code pieces (or packages) must be minimal and atomic, this means, it must not be necessary to keep track of package versions, since each package is defined as a set of immutable tasks
 
 **Important:** Each task (function) <u>behaviour</u> and <u>signature</u> should be immutable once commited, but new tasks could be added since it would not break the package's functionality
+
+### Developing language support
+
+Language support files should be located under `mod/lang/{lang_code}.py`, and must implement all functions inside `mod/lang/__interface__.py`
