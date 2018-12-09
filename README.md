@@ -1,4 +1,4 @@
-# Utils Package Manager System
+# Utils Package Manager
 
 All code should be modular, and since the beginning of times, this task is accomplished using libraries. Problem is, libraries can get too massive, and many times, only a portion of them is needed.
 
