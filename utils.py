@@ -53,6 +53,7 @@ def create(args):
                       'path': util_source_path, 'deps': []})
     except ValueError as e:
         print('Could not create file(s) under {}: {}'.format(args.path, e))
+        return
 
     # backup file
     backup = '{}.bak'.format(UTILS_FILE)
