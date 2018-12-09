@@ -19,6 +19,10 @@ That is where `upm` comes into play. The idea is to have a **minimal** package m
 
 **Important:** Each task's (function's) *behaviour* and *signature* should be immutable once commited, but new tasks could be added since it would not break the package's functionality
 
+### How to use
+
+*...Add explanation and examples*
+
 ### Developing language support
 
 Language support files should be located under `mod/lang/{lang_code}.py`, and must implement all functions inside `mod/lang/__interface__.py`
