@@ -1,1 +1,4 @@
 README.html
+**/__pycache__
+**/*.pyc
+testing-project-root
