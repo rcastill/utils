@@ -80,15 +80,15 @@ def register(args):
 
 
 def add(args):
-    pass
+    print('Not implemented', file=stderr)
 
 
 def rm(args):
-    pass
+    print('Not implemented', file=stderr)
 
 
 def ls(args):
-    pass
+    print('Not implemented', file=stderr)
 
 
 def main():
